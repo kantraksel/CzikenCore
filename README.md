@@ -22,7 +22,7 @@ The mods is currently under development, a lot of things hasn't been implemented
 This mod is licensed under **MIT License**, which can be found in [LICENSE](./LICENSE) file
 
 ## Mod development
-See **BUILD.md**
+See [BUILD.md](./BUILD.md)
 
 ## Info about another Forge releases
 The mod has been designed for Forge 1.12.2, but it does not mean it can't be ported. Just make an issue, i'll try to port it to chosen Forge version.
