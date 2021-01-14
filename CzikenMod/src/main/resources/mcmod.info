@@ -1,0 +1,16 @@
+[
+{
+  "modid": "czikencore",
+  "name": "CzikenCore 4",
+  "description": "Little utility mod for Cziken",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/kantraksel/CzikenCore",
+  "updateUrl": "https://raw.githubusercontent.com/kantraksel/CzikenCore/main/LICENSE/update/forge.json",
+  "authorList": ["Kantraksel"],
+  "credits": "Cziken is the inspiration",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
