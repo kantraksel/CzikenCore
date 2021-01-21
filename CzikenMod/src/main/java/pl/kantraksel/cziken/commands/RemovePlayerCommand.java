@@ -6,7 +6,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import pl.kantraksel.cziken.CzikenCore;
-import pl.kantraksel.cziken.server.AppointedPlayersStorage;
+import pl.kantraksel.cziken.server.NewPlayerStorage;
 
 public class RemovePlayerCommand extends CommandBase {
 	@Override
@@ -22,11 +22,11 @@ public class RemovePlayerCommand extends CommandBase {
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
 		String response = "text.czikencore.removeplayeronlymp";
-		if (args.length < 1) response = "text.czikencore.addplayernotenoughargs";
+		if (args.length < 1) response = "text.czikencore.notenoughargs";
 		else if (CzikenCore.getPhysicalSide() == Side.SERVER)  {
-			AppointedPlayersStorage storage = CzikenCore.INSTANCE.AuthSystem.Server.getAppointedPlayersStorage();
+			NewPlayerStorage storage = CzikenCore.INSTANCE.AuthSystem.Server.getNewPlayerStorage();
 			if (storage.removePlayer(args[0])) response = "text.czikencore.removeplayersuccess";
-			else response = "text.czikencore.removeplayerexists";
+			else response = "text.czikencore.removeplayernotsuccess";
 		}
 		sender.sendMessage(new TextComponentTranslation(response));
 	}

@@ -1,16 +1,16 @@
 text.czikencore.authfailed=CzikenCore: Invalid authentication token
 text.czikencore.timeout=CzikenCore: Authentication timed out
 text.czikencore.authrequired=First you have to authenticate
+text.czikencore.notenoughargs=Not enough arguments
 
-text.czikencore.reloaderror=CzikenCore: Could not reload token storage
-text.czikencore.reloadsuccess=CzikenCore: Token storage reloaded
-text.czikencore.reloadonlymp=CzikenCore: Token storage can be loaded only on dedicated server
+text.czikencore.reloaderror=Could not reload auth storage
+text.czikencore.reloadsuccess=Auth storage reloaded
+text.czikencore.reloadonlymp=Auth storage can be loaded only on dedicated server
 
-text.czikencore.addplayersuccess=CzikenCore: Added player
-text.czikencore.addplayerexists=CzikenCore: Player is already awaiting
-text.czikencore.addplayeronlymp=CzikenCore: Player can be added to whitelist only on dedicated server
-text.czikencore.addplayernotenoughargs=CzikenCore: Not enough arguments
+text.czikencore.addplayersuccess=Added player
+text.czikencore.addplayerexists=Player is already registered/known
+text.czikencore.addplayeronlymp=Player can be added to whitelist only on dedicated server
 
-text.czikencore.removeplayersuccess=CzikenCore: Removed player
-text.czikencore.removeplayerexists=CzikenCore: Player is not waiting
-text.czikencore.removeplayeronlymp=CzikenCore: Player can be removed from whitelist only on dedicated server
+text.czikencore.removeplayersuccess=Removed player
+text.czikencore.removeplayernotsuccess=Player is not registered or is already known
+text.czikencore.removeplayeronlymp=Player can be removed from whitelist only on dedicated server

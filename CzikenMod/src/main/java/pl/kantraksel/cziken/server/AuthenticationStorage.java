@@ -63,6 +63,10 @@ public class AuthenticationStorage {
 		return returnValue;
 	}
 	
+	public boolean hasUser(String name) {
+		return tokens.get(name) != null;
+	}
+	
 	public boolean reload() {
 		boolean returnValue = true;
 		HashMap<String, Token> tokens = this.tokens;

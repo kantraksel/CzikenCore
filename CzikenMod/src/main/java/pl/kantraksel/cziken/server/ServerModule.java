@@ -13,17 +13,17 @@ import pl.kantraksel.cziken.network.messages.RequestAuthMessage;
 
 public class ServerModule implements IModule {
 	private boolean isActive = false;
-	private final LobbyClass lobby = new LobbyClass();
+	private final Lobby lobby = new Lobby();
 	
 	private AuthenticationStorage authStorage = null;
-	private AppointedPlayersStorage appointedStorage = null;
+	private NewPlayerStorage newPlayerStorage = null;
 	
 	@Override
 	public boolean initialize(AuthenticationSystem parent) {
 		authStorage = AuthenticationStorage.initialize(parent.getConfigurationPath());
 		if (authStorage != null) {
-			appointedStorage = AppointedPlayersStorage.initialize(parent.getConfigurationPath());
-			if (appointedStorage != null) isActive = true;
+			newPlayerStorage = NewPlayerStorage.initialize(parent.getConfigurationPath(), authStorage);
+			if (newPlayerStorage != null) isActive = true;
 			else authStorage = null;
 		}
 		return isActive;
@@ -31,7 +31,7 @@ public class ServerModule implements IModule {
 
 	@Override
 	public void shutdown() {
-		appointedStorage = null;
+		newPlayerStorage = null;
 		authStorage = null;
 		lobby.clear();
 		isActive = false;
@@ -49,9 +49,9 @@ public class ServerModule implements IModule {
 	public void authenticate(EntityPlayerMP player, Token token) {
 		if (isActive) {
 			if (token == null) authFailed(player);
-			else if (appointedStorage.isPlayerOnList(player.getName())) {
+			else if (newPlayerStorage.isPlayerOnList(player.getName())) {
 				authStorage.addUser(player.getName(), token);
-				appointedStorage.removePlayer(player.getName());
+				newPlayerStorage.removePlayer(player.getName());
 				lobby.remove(player.getName());
 			}
 			else if (authStorage.isValidUser(player.getName(), token)){
@@ -72,7 +72,7 @@ public class ServerModule implements IModule {
 	}
 	
 	public boolean reloadStorage() {
-		return isActive && authStorage.reload();
+		return isActive && authStorage.reload() && newPlayerStorage.reload();
 	}
 	
 	//Events
@@ -103,12 +103,12 @@ public class ServerModule implements IModule {
 				}
 			}
 			
-			if (appointedStorage.changesPending()) appointedStorage.save();
+			if (newPlayerStorage.changesPending()) newPlayerStorage.save();
 			if (authStorage.changesPending()) authStorage.save();
 		}
 	}
 	
-	public AppointedPlayersStorage getAppointedPlayersStorage() {
-		return appointedStorage;
+	public NewPlayerStorage getNewPlayerStorage() {
+		return newPlayerStorage;
 	}
 }

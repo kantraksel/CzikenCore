@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.Map.Entry;
 
-public class LobbyClass {
+public class Lobby {
 	private final HashMap<String, UserSession> users = new HashMap<>();
 	
 	public void add(String name, UserSession data) {

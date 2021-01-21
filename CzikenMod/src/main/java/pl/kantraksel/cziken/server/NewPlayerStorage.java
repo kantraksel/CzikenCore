@@ -8,18 +8,20 @@ import java.util.Scanner;
 
 import pl.kantraksel.cziken.CzikenCore;
 
-public class AppointedPlayersStorage {
+public class NewPlayerStorage {
 	private List<String> players;
 	private File configFile;
+	private AuthenticationStorage authStorage;
 	private boolean hasChanged = false;
 	
-	private AppointedPlayersStorage(String configDir) {
+	private NewPlayerStorage(String configDir, AuthenticationStorage authStorage) {
 		players = new ArrayList<>();
 		configFile = new File(configDir + File.separatorChar + CzikenCore.MODID + "_appointmentlist");
+		this.authStorage = authStorage;
 	}
 	
-	public static AppointedPlayersStorage initialize(String configDir) {
-		AppointedPlayersStorage instance = new AppointedPlayersStorage(configDir);
+	public static NewPlayerStorage initialize(String configDir, AuthenticationStorage authStorage) {
+		NewPlayerStorage instance = new NewPlayerStorage(configDir, authStorage);
 		if (!instance.load()) instance = null;
 		return instance;
 	}
@@ -35,9 +37,10 @@ public class AppointedPlayersStorage {
 			scanner.close();
 		} catch (Exception e) {
 			if (scanner != null) scanner.close();
-			CzikenCore.logger.error("Failed to read AppointedPlayersStorage");
+			CzikenCore.logger.error("Failed to read NewPlayerStorage");
 			return false;
 		}
+		validate();
 		return true;
 	}
 	
@@ -54,14 +57,25 @@ public class AppointedPlayersStorage {
 			hasChanged = false;
 		} catch (Exception e) {
 			if (writer != null) writer.close();
-			CzikenCore.logger.error("Failed to save AppointedPlayersStorage");
+			CzikenCore.logger.error("Failed to save NewPlayerStorage");
 			return false;
 		}
 		return true;
 	}
 	
+	public boolean reload() {
+		boolean returnValue = true;
+		List<String> players = this.players;
+		this.players = new ArrayList<>();
+		if (!load()) {
+			returnValue = false;
+			this.players = players;
+		}
+		return returnValue;
+	}
+	
 	public boolean addPlayer(String name) {
-		boolean returnValue = !players.contains(name);
+		boolean returnValue = !players.contains(name) && !authStorage.hasUser(name);
 		if (returnValue) {
 			players.add(name);
 			hasChanged = true;
@@ -84,5 +98,17 @@ public class AppointedPlayersStorage {
 	
 	public boolean changesPending() {
 		return hasChanged;
+	}
+	
+	void validate() {
+		for (int i = 0; i < players.size(); ++i) {
+			String player = players.get(i);
+			if (authStorage.hasUser(player)) {
+				CzikenCore.logger.warn("Removed user '" + player + "' from NewPlayerList. The player is already known!");
+				players.remove(i);
+				--i;
+			}
+		}
+		hasChanged = true;
 	}
 }
