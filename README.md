@@ -2,7 +2,7 @@
 
 Finally I've decided to release the mod. After year of development. After 2 major reworks.
 This is a Forge mod, which is essentially a better whitelist mod.
-The mods is currently under development, a lot of things haven't been implemented yet.
+The mod is currently under development, a lot of things haven't been implemented yet.
 
 ## Installation and Configuration
 1. Install the mod like any other Forge mod

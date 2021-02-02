@@ -9,4 +9,7 @@ public class CzikenConfig {
 	@RangeInt(min = 20)
 	@RequiresMcRestart
 	public static int AuthenticationTime = 1200;
+	
+	@RequiresMcRestart
+	public static int AuthenticationTries = 3;
 }

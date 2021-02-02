@@ -1,8 +1,11 @@
 package pl.kantraksel.cziken.server;
 
+import java.util.Date;
 import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.UserListIPBansEntry;
 import net.minecraft.util.text.TextComponentTranslation;
 import pl.kantraksel.cziken.CzikenConfig;
 import pl.kantraksel.cziken.CzikenCore;
@@ -17,6 +20,7 @@ public class ServerModule implements IModule {
 	
 	private AuthenticationStorage authStorage = null;
 	private NewPlayerStorage newPlayerStorage = null;
+	private final IdentityStealStorage identityStealStorage = new IdentityStealStorage();
 	
 	@Override
 	public boolean initialize(AuthenticationSystem parent) {
@@ -68,7 +72,16 @@ public class ServerModule implements IModule {
 	}
 	
 	void disconnect(EntityPlayerMP player, String reason) {
+		if (identityStealStorage.checkLimit(player.getPlayerIP()))
+			ban(player.getPlayerIP());
 		player.connection.disconnect(new TextComponentTranslation(reason));
+	}
+	
+	void ban(String address) {
+		MinecraftServer server = CzikenCore.getServerInstance();
+		UserListIPBansEntry userlistipbansentry = new UserListIPBansEntry(address, (Date)null, "CzikenCore", (Date)null, "Identity is not valid. Limit exceeded");
+		server.getPlayerList().getBannedIPs().addEntry(userlistipbansentry);
+		CzikenCore.logger.warn(address + " has exceeded authentication limit!");
 	}
 	
 	public boolean reloadStorage() {

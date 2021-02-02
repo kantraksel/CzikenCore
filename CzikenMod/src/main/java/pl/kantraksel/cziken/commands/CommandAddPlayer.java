@@ -8,25 +8,25 @@ import net.minecraftforge.fml.relauncher.Side;
 import pl.kantraksel.cziken.CzikenCore;
 import pl.kantraksel.cziken.server.NewPlayerStorage;
 
-public class RemovePlayerCommand extends CommandBase {
+public class CommandAddPlayer extends CommandBase {
 	@Override
 	public String getName() {
-		return "removeCziken";
+		return "addCziken";
 	}
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/removeCziken <name>";
+		return "/addCziken <name>";
 	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
-		String response = "text.czikencore.removeplayeronlymp";
+		String response = "text.czikencore.addplayeronlymp";
 		if (args.length < 1) response = "text.czikencore.notenoughargs";
 		else if (CzikenCore.getPhysicalSide() == Side.SERVER)  {
 			NewPlayerStorage storage = CzikenCore.INSTANCE.AuthSystem.Server.getNewPlayerStorage();
-			if (storage.removePlayer(args[0])) response = "text.czikencore.removeplayersuccess";
-			else response = "text.czikencore.removeplayernotsuccess";
+			if (storage.addPlayer(args[0])) response = "text.czikencore.addplayersuccess";
+			else response = "text.czikencore.addplayerexists";
 		}
 		sender.sendMessage(new TextComponentTranslation(response));
 	}

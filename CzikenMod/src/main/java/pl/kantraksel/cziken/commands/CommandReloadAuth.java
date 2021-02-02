@@ -7,7 +7,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import pl.kantraksel.cziken.CzikenCore;
 
-public class ReloadAuthCommand extends CommandBase {
+public class CommandReloadAuth extends CommandBase {
 	@Override
 	public String getName() {
 		return "reloadCzikens";

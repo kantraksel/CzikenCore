@@ -58,9 +58,9 @@ public class CzikenCore {
     		if (AuthSystem.initializeServer()) logger.info("Server initialized successfully");
     		else logger.error("Failed to initialize server");
     	
-    	event.registerServerCommand(new ReloadAuthCommand());
-    	event.registerServerCommand(new AddPlayerCommand());
-    	event.registerServerCommand(new RemovePlayerCommand());
+    	event.registerServerCommand(new CommandReloadAuth());
+    	event.registerServerCommand(new CommandAddPlayer());
+    	event.registerServerCommand(new CommandRemovePlayer());
     }
     
     @EventHandler
