@@ -14,16 +14,21 @@ public class IdentityStealStorage {
 	//unused
 	public boolean hasLimitExceeded(String address) {
 		boolean returnValue = false;
-		Integer limit = users.get(address);
-		if (limit != null) returnValue = limit >= CzikenConfig.AuthenticationTries;
+		if (CzikenConfig.EnableAutoban) {
+			Integer limit = users.get(address);
+			if (limit != null) returnValue = limit >= CzikenConfig.AuthenticationTries;
+		}
 		return returnValue;
 	}
 	
 	public boolean checkLimit(String address) {
-		Integer limit = users.get(address);
-		if (limit == null) limit = 0;
-		++limit;
-		users.put(address, limit);
+		Integer limit = 0;
+		if (CzikenConfig.EnableAutoban) {
+			limit = users.get(address);
+			if (limit == null) limit = 0;
+			++limit;
+			users.put(address, limit);
+		}
 		return limit >= CzikenConfig.AuthenticationTries;
 	}
 	

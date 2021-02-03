@@ -91,6 +91,10 @@ public class AuthenticationStorage {
 		return returnValue;
 	}
 	
+	public boolean removeUser(String name) {
+		return tokens.remove(name) != null;
+	}
+	
 	public boolean changesPending() {
 		return hasChanged;
 	}

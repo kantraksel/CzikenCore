@@ -11,5 +11,15 @@ public class CzikenConfig {
 	public static int AuthenticationTime = 1200;
 	
 	@RequiresMcRestart
+	public static boolean EnableAutoban = true;
+	
+	@RangeInt(min = 1)
+	@RequiresMcRestart
 	public static int AuthenticationTries = 3;
+	
+	@RequiresMcRestart
+	public static boolean CountNoMessage = true;
+	
+	@RequiresMcRestart
+	public static boolean RemovePlayerOnBan = true;
 }

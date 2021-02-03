@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.UserListBans;
 import net.minecraft.server.management.UserListIPBansEntry;
 import net.minecraft.util.text.TextComponentTranslation;
 import pl.kantraksel.cziken.CzikenConfig;
@@ -66,13 +67,13 @@ public class ServerModule implements IModule {
 	}
 	
 	void authFailed(EntityPlayerMP player) {
-		disconnect(player, "text.czikencore.authfailed");
+		disconnect(player, "text.czikencore.authfailed", true);
 		CzikenCore.logger.warn("User '" + player.getName() + "':" + player.getPlayerIP() + 
 				" tried to log in");
 	}
 	
-	void disconnect(EntityPlayerMP player, String reason) {
-		if (identityStealStorage.checkLimit(player.getPlayerIP()))
+	void disconnect(EntityPlayerMP player, String reason, boolean canBan) {
+		if (canBan && identityStealStorage.checkLimit(player.getPlayerIP()))
 			ban(player.getPlayerIP());
 		player.connection.disconnect(new TextComponentTranslation(reason));
 	}
@@ -88,6 +89,17 @@ public class ServerModule implements IModule {
 		return isActive && authStorage.reload() && newPlayerStorage.reload();
 	}
 	
+	void checkBans(EntityPlayerMP player) {
+		if (CzikenConfig.RemovePlayerOnBan) {
+			UserListBans list = CzikenCore.getServerInstance().getPlayerList().getBannedPlayers();
+			String name = player.getName();
+			if (list.getBannedProfile(name) != null) {
+				authStorage.removeUser(name);
+				newPlayerStorage.removePlayer(name);
+			}
+		}
+	}
+	
 	//Events
 	public void onPlayerConnected(EntityPlayerMP player) {
 		if (isActive) {
@@ -97,7 +109,10 @@ public class ServerModule implements IModule {
 	}
 	
 	public void onPlayerDisconnected(EntityPlayerMP player) {
-		if (isActive) lobby.remove(player.getName());
+		if (isActive) {
+			lobby.remove(player.getName());
+			checkBans(player);
+		}
 	}
 	
 	public void onTick() {
@@ -107,7 +122,7 @@ public class ServerModule implements IModule {
 				EntityPlayerMP player = CzikenCore.getServerInstance().getPlayerList().getPlayerByUsername(entry.getKey());
 				if (player != null) {
 					if (data.ticksWithoutAuth == CzikenConfig.AuthenticationTime) 
-						disconnect(player, "text.czikencore.timeout");
+						disconnect(player, "text.czikencore.timeout", CzikenConfig.CountNoMessage);
 					else {
 						++data.ticksWithoutAuth;
 						if (!data.initPosition.equals(player.getPositionVector())) 
