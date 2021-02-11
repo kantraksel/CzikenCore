@@ -84,11 +84,8 @@ public class NewPlayerStorage {
 	}
 	
 	public boolean removePlayer(String name) {
-		boolean returnValue = players.contains(name);
-		if (returnValue) {
-			players.remove(name);
-			hasChanged = true;
-		}
+		boolean returnValue = players.remove(name);
+		if (returnValue) hasChanged = true;
 		return returnValue;
 	}
 	

@@ -73,8 +73,10 @@ public class ServerModule implements IModule {
 	}
 	
 	void disconnect(EntityPlayerMP player, String reason, boolean canBan) {
-		if (canBan && identityStealStorage.checkLimit(player.getPlayerIP()))
+		if (canBan && identityStealStorage.checkLimit(player.getPlayerIP())) {
 			ban(player.getPlayerIP());
+			identityStealStorage.removeInfractions(player.getPlayerIP());
+		}
 		player.connection.disconnect(new TextComponentTranslation(reason));
 	}
 	

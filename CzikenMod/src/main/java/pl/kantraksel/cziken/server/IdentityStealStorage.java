@@ -32,7 +32,6 @@ public class IdentityStealStorage {
 		return limit >= CzikenConfig.AuthenticationTries;
 	}
 	
-	//unused
 	public void removeInfractions(String address) {
 		users.remove(address);
 	}
