@@ -1,5 +1,6 @@
 package pl.kantraksel.cziken.events;
 
+import net.minecraft.command.server.CommandBanPlayer;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -10,6 +11,7 @@ import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -17,7 +19,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import pl.kantraksel.cziken.CzikenCore;
-import net.minecraftforge.event.entity.living.LivingAttackEvent;
 
 @EventBusSubscriber(modid = CzikenCore.MODID)
 public class ServerEventSubscriber {
@@ -36,6 +37,14 @@ public class ServerEventSubscriber {
 	@SubscribeEvent
 	public static void onTick(TickEvent.ServerTickEvent event) {
 		CzikenCore.INSTANCE.AuthSystem.Server.onTick();
+	}
+	
+	@SubscribeEvent
+	public static void onBanCommand(CommandEvent event) {
+		if (event.getCommand() instanceof CommandBanPlayer) {
+			if (event.getParameters().length > 0) 
+				CzikenCore.INSTANCE.AuthSystem.Server.sheuldeCheckBans();
+		}
 	}
 	
 	//Protection Event Short Functions

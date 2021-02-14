@@ -17,6 +17,7 @@ import pl.kantraksel.cziken.network.messages.RequestAuthMessage;
 
 public class ServerModule implements IModule {
 	private boolean isActive = false;
+	private boolean checkBanSheulded = false;
 	private final Lobby lobby = new Lobby();
 	
 	private AuthenticationStorage authStorage = null;
@@ -91,11 +92,16 @@ public class ServerModule implements IModule {
 		return isActive && authStorage.reload() && newPlayerStorage.reload();
 	}
 	
-	void checkBans(EntityPlayerMP player) {
+	public void sheuldeCheckBans() {
+		checkBanSheulded = true;
+	}
+	
+	void checkBans() {
+		checkBanSheulded = false;
 		if (CzikenConfig.RemovePlayerOnBan) {
 			UserListBans list = CzikenCore.getServerInstance().getPlayerList().getBannedPlayers();
-			String name = player.getName();
-			if (list.getBannedProfile(name) != null) {
+			String[] players = list.getKeys();
+			for (String name : players) {
 				authStorage.removeUser(name);
 				newPlayerStorage.removePlayer(name);
 			}
@@ -113,7 +119,6 @@ public class ServerModule implements IModule {
 	public void onPlayerDisconnected(EntityPlayerMP player) {
 		if (isActive) {
 			lobby.remove(player.getName());
-			checkBans(player);
 		}
 	}
 	
@@ -132,7 +137,7 @@ public class ServerModule implements IModule {
 					}
 				}
 			}
-			
+			if (checkBanSheulded) checkBans();
 			if (newPlayerStorage.changesPending()) newPlayerStorage.save();
 			if (authStorage.changesPending()) authStorage.save();
 		}

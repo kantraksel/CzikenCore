@@ -3,8 +3,11 @@ package pl.kantraksel.cziken.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import org.apache.commons.io.FileUtils;
 
 import pl.kantraksel.cziken.CzikenCore;
 import pl.kantraksel.cziken.Utilities;
@@ -102,9 +105,16 @@ public class AuthenticationStorage {
 	}
 	
 	public boolean save() {
-		configDir.delete();
+		try {
+			FileUtils.deleteDirectory(configDir);
+		} catch (IOException e1) {
+			CzikenCore.logger.error("Could not remove storage directory. Save has been canceled");
+			hasChanged = false;
+			return false;
+		}
 		configDir.mkdir();
 		for (Entry<String, Token> entry : tokens.entrySet()) {
+			
 			File file = new File(configDir.getPath() + File.separatorChar + entry.getKey());
 			FileOutputStream stream = null;
 			try {
@@ -112,6 +122,7 @@ public class AuthenticationStorage {
 				stream.write(entry.getValue().toBytes());
 				stream.flush();
 				Utilities.closeStream(stream);
+				CzikenCore.logger.warn("Saved " + entry.getKey());
 			} catch (Exception e) {
 				Utilities.closeStream(stream);
 				CzikenCore.logger.error("Could not save " + file.getName());
