@@ -1,10 +1,40 @@
 # How to use mod
+
+## Definitions
+- Whitelist - this mod :)
+- Ghost Player - name is registered, but didn't connect (and send token)
+- Known Player - Ghost Player, but he sent his token
+- Player Storage - lists, which contain Ghost Players and Known Players
+
+## Commands
 Commands listed below can execute operators with permission level 3 or higher or admin via console.
 
 All you need to know:
-- addCziken <player> - adds player to whitelist. First user, who connects with the name, can join game as the player
-- removeCziken <player> - removes player from whitelist. It only works, if player didn't connect to the server (=is not marked as *known*). 
-You can't remove known player from whitelist, but hey... What about banning him/her?
+- addCziken <player> - marks the player as Ghost Player.
+When user connects as the player (and sends token), becomes Known Player
+- removeCziken <player> - removes Ghost Player. Player marked as Known Player is not affected by this command
+- reloadCzikens - reloads Player Storage. This command is useful when modifying files
 
-If you're familiar with internal mechanics, there's command for you
-- reloadCzikens - reloads player storage from file system
+## Configuration file
+Server options:
+- AuthenticationTime <number> - time in ticks (20 ticks = 1 second). Should be enought high not to timeout regular players (default Forge timeout is 30 seconds)
+- AuthenticationTries <number> - how many times player can send invalid token before he gets banned
+- CountNoMessage <true/false> - if player does not send token, should it be counted to AuthenticationTries? Does not affect on server world security, still player can do nothing :)
+- EnableAutoban <true/false> - if an IP address fails to authenticate *AuthenticationTries* times, should server ban it?
+- RemovePlayerOnBan <true/false> - if operator/console bans player, should server delete his token?
+
+Client options:
+- None
+
+## Some internal wisdom
+You can ommit this section :>
+
+When player connects, all what he can do, is rotate and see. All other interactions are blocked.
+During this short period (default 60 seconds) server is waiting for authentication token.
+If token does not come (or comes, but is invalid), player is kicked.
+Valid token unlocks player.
+
+If an IP failes 3 times, it is banned (added to Minecraft ban list).
+If player is being banned, his token is removed from Player Storage.
+
+There are several options in config, feel free to change them.
