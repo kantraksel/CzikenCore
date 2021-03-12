@@ -19,7 +19,7 @@ public class AuthenticationSystem {
 		try {
 			configPath = configPath.getCanonicalFile();
 		} catch (IOException e) {
-			CzikenCore.logger.error("Could not get config directory");
+			CzikenCore.logger.error("Could not get token storage directory");
 		}
 	}
 	

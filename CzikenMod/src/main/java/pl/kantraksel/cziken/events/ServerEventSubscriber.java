@@ -49,7 +49,7 @@ public class ServerEventSubscriber {
 	
 	//Protection Event Short Functions
 	static boolean handleChatEvent(EntityPlayerMP player) {
-		if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName())) {
+		if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player)) {
 			player.sendMessage(new TextComponentTranslation("text.czikencore.authrequired"));
 			return true; //Cancel Event
 		}
@@ -72,7 +72,7 @@ public class ServerEventSubscriber {
 	public static void onAttackEntity(AttackEntityEvent event) {
 		if (event.getEntityPlayer() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)event.getEntityPlayer();
-			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName()))
+			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player))
 				event.setCanceled(true);
 		}
 	}
@@ -81,7 +81,7 @@ public class ServerEventSubscriber {
 	public static void onPickupItem(EntityItemPickupEvent event) {
 		if (event.getEntityPlayer() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)event.getEntityPlayer();
-			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName()))
+			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player))
 				event.setCanceled(true);
 		}
 	}
@@ -90,7 +90,7 @@ public class ServerEventSubscriber {
 	public static void onDropItem(ItemTossEvent event) {
 		if (event.getPlayer() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)event.getPlayer();
-			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName())) {
+			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player)) {
 				event.setCanceled(true);
 				player.inventory.addItemStackToInventory(event.getEntityItem().getItem());
 				player.inventoryContainer.detectAndSendChanges();
@@ -102,7 +102,7 @@ public class ServerEventSubscriber {
 	public static void onInteractEvent(PlayerInteractEvent event) {
 		if (event.getEntityPlayer() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)event.getEntityPlayer();
-			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName())) {
+			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player)) {
 				event.setCanceled(true);
 				player.inventoryContainer.detectAndSendChanges(); //placing blocks enforces it
 			}
@@ -113,7 +113,7 @@ public class ServerEventSubscriber {
 	public static void onTargetPlayerByMob(LivingSetAttackTargetEvent event) {
 		if (event.getTarget() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)event.getTarget();
-			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName()))
+			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player))
 				((EntityLiving)event.getEntityLiving()).setAttackTarget(null);
 		}
 	}
@@ -122,7 +122,7 @@ public class ServerEventSubscriber {
 	public static void onDamagePlayer(LivingAttackEvent event) {
 		if (event.getEntity() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP)event.getEntity();
-			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player.getName()))
+			if (!CzikenCore.INSTANCE.AuthSystem.Server.isPlayerAuthenticated(player))
 				event.setCanceled(true);
 		}
 	}

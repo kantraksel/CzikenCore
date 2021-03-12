@@ -2,10 +2,10 @@ package pl.kantraksel.cziken.server;
 
 import java.util.Date;
 import java.util.Map.Entry;
-
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.management.PlayerList;
 import net.minecraft.server.management.UserListBans;
+import net.minecraft.server.management.UserListIPBans;
 import net.minecraft.server.management.UserListIPBansEntry;
 import net.minecraft.util.text.TextComponentTranslation;
 import pl.kantraksel.cziken.CzikenConfig;
@@ -24,8 +24,14 @@ public class ServerModule implements IModule {
 	private NewPlayerStorage newPlayerStorage = null;
 	private final IdentityStealStorage identityStealStorage = new IdentityStealStorage();
 	
+	private UserListIPBans ipBans = null;
+	private UserListBans playerBans = null;
+	
 	@Override
 	public boolean initialize(AuthenticationSystem parent) {
+		PlayerList list = CzikenCore.getServerInstance().getPlayerList();
+		ipBans = list.getBannedIPs();
+		playerBans = list.getBannedPlayers();
 		authStorage = AuthenticationStorage.initialize(parent.getConfigurationPath());
 		if (authStorage != null) {
 			newPlayerStorage = NewPlayerStorage.initialize(parent.getConfigurationPath(), authStorage);
@@ -48,8 +54,8 @@ public class ServerModule implements IModule {
 		return isActive;
 	}
 	
-	public boolean isPlayerAuthenticated(String name) {
-		return !lobby.isWaiting(name);
+	public boolean isPlayerAuthenticated(EntityPlayerMP player) {
+		return !lobby.isWaiting(player);
 	}
 	
 	public void authenticate(EntityPlayerMP player, Token token) {
@@ -58,10 +64,10 @@ public class ServerModule implements IModule {
 			else if (newPlayerStorage.isPlayerOnList(player.getName())) {
 				authStorage.addUser(player.getName(), token);
 				newPlayerStorage.removePlayer(player.getName());
-				lobby.remove(player.getName());
+				lobby.remove(player);
 			}
-			else if (authStorage.isValidUser(player.getName(), token)){
-				lobby.remove(player.getName());
+			else if (authStorage.isValidUser(player.getName(), token)) {
+				lobby.remove(player);
 			}
 			else authFailed(player);
 		}
@@ -82,9 +88,8 @@ public class ServerModule implements IModule {
 	}
 	
 	void ban(String address) {
-		MinecraftServer server = CzikenCore.getServerInstance();
 		UserListIPBansEntry userlistipbansentry = new UserListIPBansEntry(address, (Date)null, "CzikenCore", (Date)null, "Identity is not valid. Limit exceeded");
-		server.getPlayerList().getBannedIPs().addEntry(userlistipbansentry);
+		ipBans.addEntry(userlistipbansentry);
 		CzikenCore.logger.warn(address + " has exceeded authentication limit!");
 	}
 	
@@ -99,8 +104,7 @@ public class ServerModule implements IModule {
 	void checkBans() {
 		checkBanSheulded = false;
 		if (CzikenConfig.RemovePlayerOnBan) {
-			UserListBans list = CzikenCore.getServerInstance().getPlayerList().getBannedPlayers();
-			String[] players = list.getKeys();
+			String[] players = playerBans.getKeys();
 			for (String name : players) {
 				authStorage.removeUser(name);
 				newPlayerStorage.removePlayer(name);
@@ -111,22 +115,22 @@ public class ServerModule implements IModule {
 	//Events
 	public void onPlayerConnected(EntityPlayerMP player) {
 		if (isActive) {
-			lobby.add(player.getName(), new UserSession(player.getPositionVector()));
+			lobby.add(player, new UserSession(player.getPositionVector()));
 			CzikenCore.INSTANCE.NetworkChannel.sendTo(new RequestAuthMessage(), player);
 		}
 	}
 	
 	public void onPlayerDisconnected(EntityPlayerMP player) {
 		if (isActive) {
-			lobby.remove(player.getName());
+			lobby.remove(player);
 		}
 	}
 	
 	public void onTick() {
 		if (isActive) {
-			for (Entry<String, UserSession> entry : lobby.getSet()) {
+			for (Entry<EntityPlayerMP, UserSession> entry : lobby.getSet()) {
 				UserSession data = entry.getValue();
-				EntityPlayerMP player = CzikenCore.getServerInstance().getPlayerList().getPlayerByUsername(entry.getKey());
+				EntityPlayerMP player = entry.getKey();
 				if (player != null) {
 					if (data.ticksWithoutAuth == CzikenConfig.AuthenticationTime) 
 						disconnect(player, "text.czikencore.timeout", CzikenConfig.CountNoMessage);
