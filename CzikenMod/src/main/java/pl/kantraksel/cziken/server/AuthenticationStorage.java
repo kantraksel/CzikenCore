@@ -30,6 +30,7 @@ public class AuthenticationStorage {
 	}
 	
 	private boolean load() {
+		CzikenCore.logger.info("Loading AuthenticationStorage...");
 		File[] files = configDir.listFiles();
 		if (files != null) {
 			for(File file : files) {
@@ -52,8 +53,9 @@ public class AuthenticationStorage {
 					CzikenCore.logger.warn("Could not read " + file.getName());
 				}
 			}
+			CzikenCore.logger.info("AuthenticationStorage has been loaded");
 		}
-		else CzikenCore.logger.warn("Authentication Storage directory does not exist. Ommitting...");
+		else CzikenCore.logger.warn("AuthenticationStorage directory does not exist. Ommitting...");
 		
 		hasChanged = false;
 		return true;
@@ -105,10 +107,11 @@ public class AuthenticationStorage {
 	}
 	
 	public boolean save() {
+		CzikenCore.logger.info("Saving AuthenticationStorage...");
 		try {
 			if (configDir.exists()) FileUtils.deleteDirectory(configDir);
 		} catch (IOException e1) {
-			CzikenCore.logger.error("Could not remove storage directory. Save has been canceled");
+			CzikenCore.logger.error("Could not remove AuthenticationStorage directory. Save has been canceled");
 			hasChanged = false;
 			return false;
 		}
@@ -122,12 +125,14 @@ public class AuthenticationStorage {
 				stream.write(entry.getValue().toBytes());
 				stream.flush();
 				Utilities.closeStream(stream);
-				CzikenCore.logger.warn("Saved " + entry.getKey());
+				CzikenCore.logger.info("Saved " + entry.getKey());
 			} catch (Exception e) {
 				Utilities.closeStream(stream);
 				CzikenCore.logger.error("Could not save " + file.getName());
 			}
 		}
+		CzikenCore.logger.info("AuthenticationStorage has been saved");
+		
 		hasChanged = false;
 		return true;
 	}

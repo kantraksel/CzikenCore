@@ -2,7 +2,7 @@
 
 ## Definitions
 - Whitelist - this mod :)
-- Ghost Player - name is registered, but didn't connect (and send token)
+- Ghost Player - name is registered, but didn't connect (and send token). Internally referenced as New Player.
 - Known Player - Ghost Player, but he sent his token
 - Player Storage - lists, which contain Ghost Players and Known Players
 
@@ -35,6 +35,6 @@ If token does not come (or comes, but is invalid), player is kicked.
 Valid token unlocks player.
 
 If an IP failes 3 times, it is banned (added to Minecraft ban list).
-If player is being banned, his token is removed from Player Storage.
+If operator/console bans player, player's token is removed from Player Storage.
 
 There are several options in config, feel free to change them.

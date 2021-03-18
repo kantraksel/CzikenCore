@@ -27,6 +27,7 @@ public class NewPlayerStorage {
 	}
 	
 	private boolean load() {
+		CzikenCore.logger.info("Loading NewPlayerStorage...");
 		Scanner scanner = null;
 		try {
 			if (!configFile.exists()) configFile.createNewFile();
@@ -36,9 +37,10 @@ public class NewPlayerStorage {
 			}
 			hasChanged = false;
 			scanner.close();
+			CzikenCore.logger.info("NewPlayerStorage has been loaded");
 		} catch (Exception e) {
 			if (scanner != null) scanner.close();
-			CzikenCore.logger.error("Failed to read NewPlayerStorage");
+			CzikenCore.logger.error("Failed to load NewPlayerStorage");
 			return false;
 		}
 		validate();
@@ -46,6 +48,7 @@ public class NewPlayerStorage {
 	}
 	
 	public boolean save() {
+		CzikenCore.logger.info("Saving NewPlayerStorage...");
 		configFile.delete();
 		PrintWriter writer = null;
 		try {
@@ -55,6 +58,7 @@ public class NewPlayerStorage {
 			}
 			writer.flush();
 			writer.close();
+			CzikenCore.logger.info("NewPlayerStorage has been saved");
 			hasChanged = false;
 		} catch (Exception e) {
 			if (writer != null) writer.close();
