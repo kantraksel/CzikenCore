@@ -2,9 +2,9 @@
   "homepage": "https://github.com/kantraksel/CzikenCore/releases",
   "1.12.2": {
     "1.1": "Security Update",
-    "1.0": "First public beta release",
+    "1.0": "First public beta release"
   },
   "promos": {
-    "1.12.2-latest": "1.1",
+    "1.12.2-latest": "1.1"
   }
 }
