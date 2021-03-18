@@ -106,7 +106,7 @@ public class AuthenticationStorage {
 	
 	public boolean save() {
 		try {
-			FileUtils.deleteDirectory(configDir);
+			if (configDir.exists()) FileUtils.deleteDirectory(configDir);
 		} catch (IOException e1) {
 			CzikenCore.logger.error("Could not remove storage directory. Save has been canceled");
 			hasChanged = false;

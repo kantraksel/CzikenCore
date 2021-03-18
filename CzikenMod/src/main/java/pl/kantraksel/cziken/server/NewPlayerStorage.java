@@ -29,6 +29,7 @@ public class NewPlayerStorage {
 	private boolean load() {
 		Scanner scanner = null;
 		try {
+			if (!configFile.exists()) configFile.createNewFile();
 			scanner = new Scanner(configFile);
 			while (scanner.hasNextLine()) {
 				players.add(scanner.nextLine());
