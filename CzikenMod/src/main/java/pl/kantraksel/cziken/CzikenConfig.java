@@ -22,4 +22,7 @@ public class CzikenConfig {
 	
 	@RequiresMcRestart
 	public static boolean RemovePlayerOnBan = true;
+	
+	@RequiresMcRestart
+	public static boolean EnableDirectoryStream = false;
 }
