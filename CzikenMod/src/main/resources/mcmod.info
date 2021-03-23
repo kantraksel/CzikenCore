@@ -6,6 +6,5 @@
   "mcversion": "${mcversion}",
   "url": "https://github.com/kantraksel/CzikenCore",
   "authorList": ["Kantraksel"],
-  "credits": "Cziken is the inspiration",
-  "logoFile": "assets/czikencore/textures/parrot.png"
+  "credits": "Cziken is the inspiration"
 }]
