@@ -25,4 +25,7 @@ public class CzikenConfig {
 	
 	@RequiresMcRestart
 	public static boolean EnableDirectoryStream = false;
+	
+	@RequiresMcRestart
+	public static boolean SaveOnStop = false;
 }

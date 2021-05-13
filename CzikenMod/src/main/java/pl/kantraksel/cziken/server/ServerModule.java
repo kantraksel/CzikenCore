@@ -43,6 +43,11 @@ public class ServerModule implements IModule {
 
 	@Override
 	public void shutdown() {
+		if (CzikenConfig.SaveOnStop) {
+			newPlayerStorage.save();
+			authStorage.save();
+		}
+		
 		newPlayerStorage = null;
 		authStorage = null;
 		lobby.clear();
