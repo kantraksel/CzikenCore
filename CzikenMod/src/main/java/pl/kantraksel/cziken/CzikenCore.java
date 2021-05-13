@@ -22,11 +22,12 @@ import pl.kantraksel.cziken.network.messages.ResponseAuthMessage;
 
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = CzikenCore.MODID, name = CzikenCore.NAME, version = CzikenCore.VERSION, updateJSON = "https://raw.githubusercontent.com/kantraksel/CzikenCore/main/update/forge.json")
+@Mod(modid = CzikenCore.MODID, name = CzikenCore.NAME, version = CzikenCore.VERSION, updateJSON = CzikenCore.UPDATEURL)
 public class CzikenCore {
     public static final String MODID = "czikencore";
     public static final String NAME = "CzikenCore 4";
     public static final String VERSION = "1.1";
+    public static final String UPDATEURL = "https://raw.githubusercontent.com/kantraksel/CzikenCore/main/update/forge.json";
 
     @Instance(MODID) 
     public static CzikenCore INSTANCE;

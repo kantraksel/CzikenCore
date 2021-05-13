@@ -28,9 +28,9 @@ public class ResponseAuthMessage implements IMessage {
 		} catch (Exception e) {
 			CzikenCore.logger.warn("Could not receive client auth token!");
 			return;
-		} finally {
-			token = new Token(buff);
 		}
+		
+		token = new Token(buff);
 	}
 
 	@Override
