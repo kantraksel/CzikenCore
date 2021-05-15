@@ -17,11 +17,13 @@ When user connects as the player (and sends token), becomes Known Player
 
 ## Configuration file
 Server options:
-- AuthenticationTime <number> - time in ticks (20 ticks = 1 second). Should be enought high not to timeout regular players (default Forge timeout is 30 seconds)
-- AuthenticationTries <number> - how many times player can send invalid token before he gets banned
+- AuthenticationTime <number/20> - time in ticks (20 ticks = 1 second). Should be enought high not to timeout regular players (default Forge timeout is 30 seconds)
+- AuthenticationTries <number/1> - how many times player can send invalid token before he gets banned
 - CountNoMessage <true/false> - if player does not send token, should it be counted to AuthenticationTries? Does not affect on server world security, still player can do nothing :)
 - EnableAutoban <true/false> - if an IP address fails to authenticate *AuthenticationTries* times, should server ban it?
 - RemovePlayerOnBan <true/false> - if operator/console bans player, should server delete his token?
+- EnableDirectoryStream <true/false> - experminetal feature. Changes way that server reads local storage. *Theoretically* it's cheaper, but unconfirmed
+- SaveOnStop <true/false> - save storage on server stop. Disabled by default. Remember that storage is saved on every change
 
 Client options:
 - None
